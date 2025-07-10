@@ -1,7 +1,4 @@
 import os
-
-from sympy.physics.units import force
-
 from scripts.train import train_model
 from scripts.test import test_model
 import multiprocessing
