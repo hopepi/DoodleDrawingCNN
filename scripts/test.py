@@ -3,7 +3,7 @@ from model.cnn_doodle import DoodleCNN
 from utils.dataloader import get_dataloaders
 import os
 
-def test_model(checkpoint_path="saved_models/checkpoint.pth", batch_size=64):
+def test_model(checkpoint_path="saved_models/best_model.pth", batch_size=64):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = DoodleCNN().to(device)
 

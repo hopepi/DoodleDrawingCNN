@@ -6,18 +6,20 @@ from model.cnn_doodle import DoodleCNN
 from utils.dataloader import get_dataloaders
 from tqdm import tqdm
 
-
-def train_model(epochs=10, batch_size=64, lr=0.001,
+def train_model(epochs=20, batch_size=64, lr=0.001,
                 model_path="saved_models", checkpoint_path="saved_models/checkpoint.pth"):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
     model = DoodleCNN().to(device)
+
     optimizer = optim.Adam(model.parameters(), lr=lr)
     criterion = nn.CrossEntropyLoss()
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', patience=3, factor=0.5)
 
     start_epoch = 1
     best_accuracy = 0.0
+    epochs_no_improve = 0
+    early_stop_patience = 5
 
     if os.path.exists(checkpoint_path):
         print("Checkpoint bulundu. Model eğitime kaldığı yerden devam edecek...\n")
@@ -32,7 +34,6 @@ def train_model(epochs=10, batch_size=64, lr=0.001,
         "data/doodle_split/train",
         "data/doodle_split/test",
         batch_size=batch_size,
-        num_workers=1
     )
 
     os.makedirs(model_path, exist_ok=True)
@@ -43,7 +44,8 @@ def train_model(epochs=10, batch_size=64, lr=0.001,
         correct = 0
         total = 0
 
-        for images, labels in tqdm(train_loader, desc=f"Epoch {epoch}/{epochs}"):
+        loop = tqdm(train_loader, desc=f"Epoch {epoch}/{epochs}")
+        for images, labels in loop:
             images, labels = images.to(device), labels.to(device)
 
             outputs = model(images)
@@ -58,6 +60,8 @@ def train_model(epochs=10, batch_size=64, lr=0.001,
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
+            loop.set_postfix(loss=loss.item())
+
         train_acc = 100 * correct / total
         avg_loss = running_loss / len(train_loader)
 
@@ -65,7 +69,7 @@ def train_model(epochs=10, batch_size=64, lr=0.001,
         test_correct = 0
         test_total = 0
         with torch.no_grad():
-            for images, labels in tqdm(test_loader, desc="Testing"):
+            for images, labels in tqdm(test_loader, desc="Testing", leave=False):
                 images, labels = images.to(device), labels.to(device)
                 outputs = model(images)
                 _, predicted = torch.max(outputs, 1)
@@ -74,8 +78,9 @@ def train_model(epochs=10, batch_size=64, lr=0.001,
 
         test_acc = 100 * test_correct / test_total
 
-        print(f"Epoch [{epoch}/{epochs}] - "
-              f"Loss: {avg_loss:.4f} | Train Acc: {train_acc:.4f}% | Test Acc: {test_acc:.4f}%")
+        print(f"\nEpoch [{epoch}/{epochs}] ---- Loss: {avg_loss:.4f} ---- Train Acc: {train_acc:.4f}% ---- Test Acc: {test_acc:.4f}%")
+
+        scheduler.step(test_acc)
 
         torch.save({
             "epoch": epoch,
@@ -88,5 +93,14 @@ def train_model(epochs=10, batch_size=64, lr=0.001,
 
         if test_acc > best_accuracy:
             best_accuracy = test_acc
+            epochs_no_improve = 0
             torch.save(model.state_dict(), os.path.join(model_path, "best_model.pth"))
-            print(f"Yeni en iyi model kaydedildi {best_accuracy:.2f}%\n")
+            print(f"Yeni en iyi model kaydedildi: {best_accuracy:.2f}%")
+        else:
+            epochs_no_improve += 1
+            print(f"Gelişmeyen epoch sayısı: {epochs_no_improve}/{early_stop_patience}")
+
+        # Early stopping kontrolü
+        if epochs_no_improve >= early_stop_patience:
+            print(f"Eğitim erken durduruldu. Test doğruluğu {early_stop_patience} epoch boyunca gelişmedi.")
+            break
