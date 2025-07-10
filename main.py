@@ -1,16 +1,18 @@
 import os
-
 from scripts.predict import predict_image
 from scripts.train import train_model
 from scripts.test import test_model
 import multiprocessing
 import torch
+from scripts.visualize import visualize_diverse_predictions
+
 
 def menu():
     print("\nDoodle Sınıflandırma Sistemi")
     print("1 - Modeli Eğit")
     print("2 - Modeli Test Et")
     print("3 - Modeli Tahmin Et")
+    print("4 - Rastgele Tahmin Görselleştir")
     print("0 - Çıkış")
 
 def main():
@@ -30,7 +32,8 @@ def main():
             class_names.sort()
             predict_image(image_path, class_names=class_names)
 
-
+        elif choice == "4":
+            visualize_diverse_predictions()
         elif choice == "0":
             print("Çıkılıyor")
             break

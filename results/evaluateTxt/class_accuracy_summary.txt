@@ -1,0 +1,33 @@
+En zayıf 15 sınıf:
+garden hose              : 19.67%
+marker                   : 21.50%
+bear                     : 26.67%
+cooler                   : 29.33%
+squiggle                 : 31.17%
+pool                     : 33.17%
+bird                     : 33.33%
+oven                     : 38.17%
+bus                      : 38.50%
+dog                      : 39.33%
+mouse                    : 39.33%
+coffee cup               : 39.50%
+truck                    : 41.17%
+hurricane                : 41.33%
+potato                   : 42.33%
+
+En iyi 15 sınıf:
+snail                    : 91.33%
+skull                    : 91.50%
+wine glass               : 91.67%
+hand                     : 91.83%
+triangle                 : 92.17%
+stairs                   : 92.33%
+umbrella                 : 92.50%
+rainbow                  : 92.83%
+stop sign                : 92.83%
+ladder                   : 93.00%
+headphones               : 93.33%
+The Mona Lisa            : 93.50%
+snowman                  : 94.17%
+star                     : 94.50%
+envelope                 : 95.67%

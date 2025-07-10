@@ -16,6 +16,7 @@ def get_dataloaders(train_dir, test_dir, batch_size=64):
 
     test_transform = transforms.Compose([
         transforms.Grayscale(num_output_channels=1),
+        transforms.Resize((64, 64)),
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))
     ])
