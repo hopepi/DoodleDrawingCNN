@@ -89,9 +89,9 @@ Randomly selected doodles from different classes alongside model predictions.
 ### Per-Class Accuracy Graphs  
 Bar charts showing test accuracy per class.
 
-![Per-Class Accuracy 1](results/evaluateResult/per_class_accuracy_1.png)  
-![Per-Class Accuracy 2](results/evaluateResult/per_class_accuracy_2.png)  
-![Per-Class Accuracy 3](results/evaluateResult/per_class_accuracy_3.png)  
+![Per-Class Accuracy 1](results/evaluateResult/per_class_accuracy_23.png)  
+![Per-Class Accuracy 2](results/evaluateResult/per_class_accuracy_22.png)  
+![Per-Class Accuracy 3](results/evaluateResult/per_class_accuracy_21.png)  
 
 These visuals provide a concise summary of the training process and model performance, easily accessible in the `results/` directory.
 
