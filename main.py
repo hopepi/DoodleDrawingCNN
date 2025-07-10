@@ -1,4 +1,6 @@
 import os
+
+from scripts.predict import predict_image
 from scripts.train import train_model
 from scripts.test import test_model
 import multiprocessing
@@ -8,6 +10,7 @@ def menu():
     print("\nDoodle Sınıflandırma Sistemi")
     print("1 - Modeli Eğit")
     print("2 - Modeli Test Et")
+    print("3 - Modeli Tahmin Et")
     print("0 - Çıkış")
 
 def main():
@@ -20,6 +23,13 @@ def main():
 
         elif choice == "2":
             test_model()
+
+        elif choice == "3":
+            image_path = input("Tahmin edilecek görselin yolunu girin: ")
+            class_names = os.listdir("data/doodle_split/train")
+            class_names.sort()
+            predict_image(image_path, class_names=class_names)
+
 
         elif choice == "0":
             print("Çıkılıyor")

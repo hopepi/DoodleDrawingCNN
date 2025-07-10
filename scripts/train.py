@@ -6,7 +6,7 @@ from model.cnn_doodle import DoodleCNN
 from utils.dataloader import get_dataloaders
 from tqdm import tqdm
 
-def train_model(epochs=20, batch_size=64, lr=0.001,
+def train_model(epochs=40, batch_size=64, lr=0.001,
                 model_path="saved_models", checkpoint_path="saved_models/checkpoint.pth"):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
